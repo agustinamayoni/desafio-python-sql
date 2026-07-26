@@ -1,0 +1,880 @@
+# ============================================================
+# BONUS - CONCILIACIÓN CON EL PROCESADOR EXTERNO
+#
+# Se compara la tabla interna de transacciones con el archivo
+# liquidaciones_procesador.csv mediante la referencia externa.
+# ============================================================
+
+import sqlite3
+from pathlib import Path
+
+import pandas as pd
+
+
+# ============================================================
+# CONFIGURACIÓN
+# ============================================================
+
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "desafio.db"
+CSV_PATH = BASE_DIR / "liquidaciones_procesador.csv"
+SALIDA_PATH = BASE_DIR / "discrepancias_conciliacion.csv"
+
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 180)
+pd.set_option("display.float_format", lambda x: f"{x:,.2f}")
+
+
+# ============================================================
+# VALIDACIÓN DE ARCHIVOS
+# ============================================================
+
+if not DB_PATH.exists():
+    raise FileNotFoundError(
+        f"No se encontró la base de datos en: {DB_PATH}"
+    )
+
+if not CSV_PATH.exists():
+    raise FileNotFoundError(
+        f"No se encontró el archivo del procesador en: {CSV_PATH}"
+    )
+
+
+# ============================================================
+# 1. CARGA DE DATOS
+# ============================================================
+
+print("\n" + "=" * 80)
+print("1. CARGA DE DATOS")
+print("=" * 80)
+
+with sqlite3.connect(DB_PATH) as conexion:
+    transacciones = pd.read_sql_query(
+        """
+        SELECT
+            id,
+            referencia_externa,
+            fecha,
+            monto,
+            estado
+        FROM transacciones
+        """,
+        conexion
+    )
+
+liquidaciones = pd.read_csv(
+    CSV_PATH,
+    dtype=str
+)
+
+print(f"Transacciones internas cargadas: {len(transacciones):,}")
+print(f"Registros del procesador cargados: {len(liquidaciones):,}")
+
+print(
+    f"Columnas del procesador: "
+    f"{liquidaciones.columns.tolist()}"
+)
+
+
+# ============================================================
+# 2. EXPLORACIÓN INICIAL DEL ARCHIVO EXTERNO
+# ============================================================
+
+print("\n" + "=" * 80)
+print("2. CALIDAD INICIAL DEL ARCHIVO EXTERNO")
+print("=" * 80)
+
+print("\nValores nulos antes de la limpieza:")
+print(liquidaciones.isna().sum())
+
+print("\nDistribución original de estados:")
+print(
+    liquidaciones["estado"]
+    .value_counts(dropna=False)
+)
+
+print("\nRegistros completamente duplicados:")
+print(liquidaciones.duplicated().sum())
+
+
+# ============================================================
+# 3. LIMPIEZA Y NORMALIZACIÓN
+# ============================================================
+
+print("\n" + "=" * 80)
+print("3. LIMPIEZA Y NORMALIZACIÓN")
+print("=" * 80)
+
+# ------------------------------------------------------------
+# Referencias
+# ------------------------------------------------------------
+
+transacciones["referencia_normalizada"] = (
+    transacciones["referencia_externa"]
+    .astype("string")
+    .str.strip()
+    .str.upper()
+    .replace("", pd.NA)
+)
+
+liquidaciones["referencia_normalizada"] = (
+    liquidaciones["referencia"]
+    .astype("string")
+    .str.strip()
+    .str.upper()
+    .replace("", pd.NA)
+)
+
+# ------------------------------------------------------------
+# Fechas
+# ------------------------------------------------------------
+
+transacciones["fecha_normalizada"] = pd.to_datetime(
+    transacciones["fecha"],
+    errors="coerce"
+).dt.normalize()
+
+liquidaciones["fecha_normalizada"] = pd.to_datetime(
+    liquidaciones["fecha_liquidacion"],
+    errors="coerce"
+).dt.normalize()
+
+# ------------------------------------------------------------
+# Montos del procesador
+#
+# Se contemplan los siguientes formatos:
+# 187365.80
+# 158154,12
+# 3.000,50
+# ------------------------------------------------------------
+
+liquidaciones["monto_limpio"] = (
+    liquidaciones["monto"]
+    .astype("string")
+    .str.strip()
+)
+
+tiene_punto_y_coma = (
+    liquidaciones["monto_limpio"].str.contains(
+        ".",
+        regex=False,
+        na=False
+    )
+    &
+    liquidaciones["monto_limpio"].str.contains(
+        ",",
+        regex=False,
+        na=False
+    )
+)
+
+# Si aparecen punto y coma, se interpreta el punto como
+# separador de miles y la coma como separador decimal.
+liquidaciones.loc[
+    tiene_punto_y_coma,
+    "monto_limpio"
+] = (
+    liquidaciones.loc[
+        tiene_punto_y_coma,
+        "monto_limpio"
+    ]
+    .str.replace(".", "", regex=False)
+    .str.replace(",", ".", regex=False)
+)
+
+# Si aparece únicamente coma, se interpreta como decimal.
+solo_coma = (
+    liquidaciones["monto_limpio"].str.contains(
+        ",",
+        regex=False,
+        na=False
+    )
+    &
+    ~liquidaciones["monto_limpio"].str.contains(
+        ".",
+        regex=False,
+        na=False
+    )
+)
+
+liquidaciones.loc[
+    solo_coma,
+    "monto_limpio"
+] = (
+    liquidaciones.loc[
+        solo_coma,
+        "monto_limpio"
+    ]
+    .str.replace(",", ".", regex=False)
+)
+
+liquidaciones["monto_normalizado"] = pd.to_numeric(
+    liquidaciones["monto_limpio"],
+    errors="coerce"
+)
+
+transacciones["monto_normalizado"] = pd.to_numeric(
+    transacciones["monto"],
+    errors="coerce"
+)
+
+# ------------------------------------------------------------
+# Estados
+# ------------------------------------------------------------
+
+transacciones["estado_normalizado"] = (
+    transacciones["estado"]
+    .astype("string")
+    .str.strip()
+    .str.lower()
+)
+
+liquidaciones["estado_normalizado"] = (
+    liquidaciones["estado"]
+    .astype("string")
+    .str.strip()
+    .str.upper()
+    .map(
+        {
+            "OK": "aprobada",
+            "FALLIDA": "rechazada",
+            "PENDIENTE": "pendiente"
+        }
+    )
+)
+
+
+# ============================================================
+# 4. PROBLEMAS DE CALIDAD DETECTADOS
+# ============================================================
+
+print("\n" + "=" * 80)
+print("4. PROBLEMAS DE CALIDAD DETECTADOS")
+print("=" * 80)
+
+referencias_nulas_procesador = (
+    liquidaciones["referencia_normalizada"]
+    .isna()
+    .sum()
+)
+
+fechas_invalidas_procesador = (
+    liquidaciones["fecha_normalizada"]
+    .isna()
+    .sum()
+)
+
+montos_invalidos_procesador = (
+    liquidaciones["monto_normalizado"]
+    .isna()
+    .sum()
+)
+
+estados_no_reconocidos = (
+    liquidaciones["estado_normalizado"]
+    .isna()
+    .sum()
+)
+
+filas_duplicadas_procesador = (
+    liquidaciones.duplicated().sum()
+)
+
+referencias_duplicadas_procesador = (
+    liquidaciones.loc[
+        liquidaciones["referencia_normalizada"].notna(),
+        "referencia_normalizada"
+    ]
+    .duplicated(keep=False)
+    .sum()
+)
+
+cantidad_referencias_duplicadas_procesador = (
+    liquidaciones.loc[
+        liquidaciones["referencia_normalizada"].notna()
+        &
+        liquidaciones["referencia_normalizada"].duplicated(
+            keep=False
+        ),
+        "referencia_normalizada"
+    ]
+    .nunique()
+)
+
+referencias_nulas_internas = (
+    transacciones["referencia_normalizada"]
+    .isna()
+    .sum()
+)
+
+referencias_duplicadas_internas = (
+    transacciones.loc[
+        transacciones["referencia_normalizada"].notna(),
+        "referencia_normalizada"
+    ]
+    .duplicated(keep=False)
+    .sum()
+)
+
+cantidad_referencias_duplicadas_internas = (
+    transacciones.loc[
+        transacciones["referencia_normalizada"].notna()
+        &
+        transacciones["referencia_normalizada"].duplicated(
+            keep=False
+        ),
+        "referencia_normalizada"
+    ]
+    .nunique()
+)
+
+print(
+    f"Referencias nulas en el procesador: "
+    f"{referencias_nulas_procesador:,}"
+)
+
+print(
+    f"Fechas inválidas en el procesador: "
+    f"{fechas_invalidas_procesador:,}"
+)
+
+print(
+    f"Montos nulos o inválidos en el procesador: "
+    f"{montos_invalidos_procesador:,}"
+)
+
+print(
+    f"Estados no reconocidos en el procesador: "
+    f"{estados_no_reconocidos:,}"
+)
+
+print(
+    f"Filas completamente duplicadas en el procesador: "
+    f"{filas_duplicadas_procesador:,}"
+)
+
+print(
+    f"Registros involucrados en referencias duplicadas "
+    f"del procesador: {referencias_duplicadas_procesador:,}"
+)
+
+print(
+    f"Referencias distintas duplicadas en el procesador: "
+    f"{cantidad_referencias_duplicadas_procesador:,}"
+)
+
+print(
+    f"Transacciones internas sin referencia externa: "
+    f"{referencias_nulas_internas:,}"
+)
+
+print(
+    f"Registros internos involucrados en referencias duplicadas: "
+    f"{referencias_duplicadas_internas:,}"
+)
+
+print(
+    f"Referencias distintas duplicadas en la fuente interna: "
+    f"{cantidad_referencias_duplicadas_internas:,}"
+)
+
+
+# ============================================================
+# 5. ANÁLISIS DE COBERTURA DE REFERENCIAS
+# ============================================================
+
+print("\n" + "=" * 80)
+print("5. COBERTURA DE REFERENCIAS ENTRE LAS DOS FUENTES")
+print("=" * 80)
+
+referencias_internas = (
+    transacciones.loc[
+        transacciones["referencia_normalizada"].notna(),
+        ["referencia_normalizada"]
+    ]
+    .drop_duplicates()
+)
+
+referencias_procesador = (
+    liquidaciones.loc[
+        liquidaciones["referencia_normalizada"].notna(),
+        ["referencia_normalizada"]
+    ]
+    .drop_duplicates()
+)
+
+cobertura_referencias = referencias_internas.merge(
+    referencias_procesador,
+    on="referencia_normalizada",
+    how="outer",
+    indicator=True
+)
+
+referencias_en_ambas = (
+    cobertura_referencias["_merge"]
+    .eq("both")
+    .sum()
+)
+
+referencias_solo_internas = (
+    cobertura_referencias["_merge"]
+    .eq("left_only")
+    .sum()
+)
+
+referencias_solo_procesador = (
+    cobertura_referencias["_merge"]
+    .eq("right_only")
+    .sum()
+)
+
+total_referencias_internas = len(referencias_internas)
+
+porcentaje_cobertura = (
+    referencias_en_ambas
+    / total_referencias_internas
+    * 100
+    if total_referencias_internas > 0
+    else 0
+)
+
+print(
+    f"Referencias únicas en la fuente interna: "
+    f"{len(referencias_internas):,}"
+)
+
+print(
+    f"Referencias únicas en el procesador: "
+    f"{len(referencias_procesador):,}"
+)
+
+print(
+    f"Referencias presentes en ambas fuentes: "
+    f"{referencias_en_ambas:,}"
+)
+
+print(
+    f"Referencias presentes sólo en la fuente interna: "
+    f"{referencias_solo_internas:,}"
+)
+
+print(
+    f"Referencias presentes sólo en el procesador: "
+    f"{referencias_solo_procesador:,}"
+)
+
+print(
+    f"Cobertura del procesador sobre las referencias internas: "
+    f"{porcentaje_cobertura:.2f}%"
+)
+
+
+# ============================================================
+# 6. COMPARACIÓN DE CAMPOS
+#
+# Para evitar cruces muchos-a-muchos, esta comparación se realiza
+# únicamente sobre referencias no duplicadas en ambas fuentes.
+# Las referencias duplicadas se informan como un problema separado.
+# ============================================================
+
+print("\n" + "=" * 80)
+print("6. COMPARACIÓN DE FECHA, MONTO Y ESTADO")
+print("=" * 80)
+
+cantidad_por_referencia_interna = (
+    transacciones.loc[
+        transacciones["referencia_normalizada"].notna()
+    ]
+    .groupby("referencia_normalizada")
+    .size()
+)
+
+cantidad_por_referencia_procesador = (
+    liquidaciones.loc[
+        liquidaciones["referencia_normalizada"].notna()
+    ]
+    .groupby("referencia_normalizada")
+    .size()
+)
+
+referencias_unicas_internas = cantidad_por_referencia_interna[
+    cantidad_por_referencia_interna == 1
+].index
+
+referencias_unicas_procesador = cantidad_por_referencia_procesador[
+    cantidad_por_referencia_procesador == 1
+].index
+
+transacciones_comparables = (
+    transacciones[
+        transacciones["referencia_normalizada"]
+        .isin(referencias_unicas_internas)
+    ][
+        [
+            "id",
+            "referencia_normalizada",
+            "fecha_normalizada",
+            "monto_normalizado",
+            "estado_normalizado"
+        ]
+    ]
+    .rename(
+        columns={
+            "id": "transaccion_id",
+            "fecha_normalizada": "fecha_interna",
+            "monto_normalizado": "monto_interno",
+            "estado_normalizado": "estado_interno"
+        }
+    )
+)
+
+liquidaciones_comparables = (
+    liquidaciones[
+        liquidaciones["referencia_normalizada"]
+        .isin(referencias_unicas_procesador)
+    ][
+        [
+            "referencia_normalizada",
+            "fecha_normalizada",
+            "monto_normalizado",
+            "estado_normalizado"
+        ]
+    ]
+    .rename(
+        columns={
+            "fecha_normalizada": "fecha_procesador",
+            "monto_normalizado": "monto_procesador",
+            "estado_normalizado": "estado_procesador"
+        }
+    )
+)
+
+conciliacion = transacciones_comparables.merge(
+    liquidaciones_comparables,
+    on="referencia_normalizada",
+    how="inner",
+    validate="one_to_one"
+)
+
+conciliacion["coincide_fecha"] = (
+    conciliacion["fecha_interna"]
+    .eq(conciliacion["fecha_procesador"])
+)
+
+# Se admite una tolerancia de un centavo para la comparación.
+conciliacion["diferencia_monto"] = (
+    conciliacion["monto_interno"]
+    - conciliacion["monto_procesador"]
+).abs()
+
+conciliacion["coincide_monto"] = (
+    conciliacion["monto_interno"].notna()
+    &
+    conciliacion["monto_procesador"].notna()
+    &
+    conciliacion["diferencia_monto"].le(0.01)
+)
+
+conciliacion["coincide_estado"] = (
+    conciliacion["estado_interno"]
+    .eq(conciliacion["estado_procesador"])
+)
+
+conciliacion["coincide_todo"] = (
+    conciliacion["coincide_fecha"]
+    &
+    conciliacion["coincide_monto"]
+    &
+    conciliacion["coincide_estado"]
+)
+
+cantidad_comparada = len(conciliacion)
+
+diferencias_fecha = (
+    ~conciliacion["coincide_fecha"]
+).sum()
+
+diferencias_monto = (
+    ~conciliacion["coincide_monto"]
+).sum()
+
+diferencias_estado = (
+    ~conciliacion["coincide_estado"]
+).sum()
+
+coincidencias_completas = (
+    conciliacion["coincide_todo"]
+    .sum()
+)
+
+registros_con_alguna_diferencia = (
+    ~conciliacion["coincide_todo"]
+).sum()
+
+porcentaje_coincidencia_completa = (
+    coincidencias_completas
+    / cantidad_comparada
+    * 100
+    if cantidad_comparada > 0
+    else 0
+)
+
+print(
+    f"Referencias únicas comparadas campo a campo: "
+    f"{cantidad_comparada:,}"
+)
+
+print(
+    f"Coincidencias completas: "
+    f"{coincidencias_completas:,}"
+)
+
+print(
+    f"Registros con alguna discrepancia: "
+    f"{registros_con_alguna_diferencia:,}"
+)
+
+print(
+    f"Porcentaje de coincidencia completa: "
+    f"{porcentaje_coincidencia_completa:.2f}%"
+)
+
+print(
+    f"Diferencias de fecha: "
+    f"{diferencias_fecha:,}"
+)
+
+print(
+    f"Diferencias de monto: "
+    f"{diferencias_monto:,}"
+)
+
+print(
+    f"Diferencias de estado: "
+    f"{diferencias_estado:,}"
+)
+
+
+# ============================================================
+# 7. GENERACIÓN DEL DETALLE DE DISCREPANCIAS
+# ============================================================
+
+print("\n" + "=" * 80)
+print("7. DETALLE DE DISCREPANCIAS")
+print("=" * 80)
+
+# Discrepancias en referencias presentes en ambas fuentes.
+discrepancias_campos = conciliacion[
+    ~conciliacion["coincide_todo"]
+].copy()
+
+discrepancias_campos["tipo_discrepancia"] = ""
+
+discrepancias_campos.loc[
+    ~discrepancias_campos["coincide_fecha"],
+    "tipo_discrepancia"
+] += "fecha; "
+
+discrepancias_campos.loc[
+    ~discrepancias_campos["coincide_monto"],
+    "tipo_discrepancia"
+] += "monto; "
+
+discrepancias_campos.loc[
+    ~discrepancias_campos["coincide_estado"],
+    "tipo_discrepancia"
+] += "estado; "
+
+discrepancias_campos["tipo_discrepancia"] = (
+    discrepancias_campos["tipo_discrepancia"]
+    .str.rstrip("; ")
+)
+
+# Referencias que aparecen sólo en una de las fuentes.
+referencias_sin_match = cobertura_referencias[
+    cobertura_referencias["_merge"] != "both"
+].copy()
+
+referencias_sin_match["tipo_discrepancia"] = (
+    referencias_sin_match["_merge"]
+    .map(
+        {
+            "left_only": "solo_fuente_interna",
+            "right_only": "solo_procesador"
+        }
+    )
+    .astype("string")
+)
+
+referencias_sin_match = referencias_sin_match[
+    [
+        "referencia_normalizada",
+        "tipo_discrepancia"
+    ]
+]
+
+# Referencias duplicadas.
+duplicadas_internas = (
+    transacciones.loc[
+        transacciones["referencia_normalizada"].notna()
+        &
+        transacciones["referencia_normalizada"].duplicated(
+            keep=False
+        ),
+        ["referencia_normalizada"]
+    ]
+    .drop_duplicates()
+)
+
+duplicadas_internas["tipo_discrepancia"] = (
+    "referencia_duplicada_fuente_interna"
+)
+
+duplicadas_procesador = (
+    liquidaciones.loc[
+        liquidaciones["referencia_normalizada"].notna()
+        &
+        liquidaciones["referencia_normalizada"].duplicated(
+            keep=False
+        ),
+        ["referencia_normalizada"]
+    ]
+    .drop_duplicates()
+)
+
+duplicadas_procesador["tipo_discrepancia"] = (
+    "referencia_duplicada_procesador"
+)
+
+columnas_salida = [
+    "referencia_normalizada",
+    "tipo_discrepancia",
+    "transaccion_id",
+    "fecha_interna",
+    "fecha_procesador",
+    "monto_interno",
+    "monto_procesador",
+    "diferencia_monto",
+    "estado_interno",
+    "estado_procesador"
+]
+
+detalle_campos = discrepancias_campos[
+    columnas_salida
+].copy()
+
+detalle_sin_match = referencias_sin_match.copy()
+
+for columna in columnas_salida:
+    if columna not in detalle_sin_match.columns:
+        detalle_sin_match[columna] = pd.NA
+
+detalle_sin_match = detalle_sin_match[columnas_salida]
+
+detalle_duplicadas_internas = duplicadas_internas.copy()
+detalle_duplicadas_procesador = duplicadas_procesador.copy()
+
+for columna in columnas_salida:
+    if columna not in detalle_duplicadas_internas.columns:
+        detalle_duplicadas_internas[columna] = pd.NA
+
+    if columna not in detalle_duplicadas_procesador.columns:
+        detalle_duplicadas_procesador[columna] = pd.NA
+
+detalle_duplicadas_internas = (
+    detalle_duplicadas_internas[columnas_salida]
+)
+
+detalle_duplicadas_procesador = (
+    detalle_duplicadas_procesador[columnas_salida]
+)
+
+detalle_discrepancias = pd.concat(
+    [
+        detalle_campos,
+        detalle_sin_match,
+        detalle_duplicadas_internas,
+        detalle_duplicadas_procesador
+    ],
+    ignore_index=True
+)
+
+detalle_discrepancias.to_csv(
+    SALIDA_PATH,
+    index=False,
+    encoding="utf-8-sig"
+)
+
+print(
+    f"Total de discrepancias registradas en la salida: "
+    f"{len(detalle_discrepancias):,}"
+)
+
+print(
+    f"Archivo generado: "
+    f"{SALIDA_PATH.name}"
+)
+
+if not detalle_discrepancias.empty:
+    print("\nPrimeras discrepancias detectadas:")
+    print(
+        detalle_discrepancias
+        .head(20)
+        .to_string(index=False)
+    )
+
+
+# ============================================================
+# 8. RESUMEN FINAL
+# ============================================================
+
+print("\n" + "=" * 80)
+print("8. RESUMEN FINAL")
+print("=" * 80)
+
+print(
+    f"- Cobertura de referencias internas: "
+    f"{porcentaje_cobertura:.2f}%."
+)
+
+print(
+    f"- Referencias sólo en la fuente interna: "
+    f"{referencias_solo_internas:,}."
+)
+
+print(
+    f"- Referencias sólo en el procesador: "
+    f"{referencias_solo_procesador:,}."
+)
+
+print(
+    f"- Coincidencia completa entre registros comparables: "
+    f"{porcentaje_coincidencia_completa:.2f}%."
+)
+
+print(
+    f"- Diferencias de fecha: "
+    f"{diferencias_fecha:,}."
+)
+
+print(
+    f"- Diferencias de monto: "
+    f"{diferencias_monto:,}."
+)
+
+print(
+    f"- Diferencias de estado: "
+    f"{diferencias_estado:,}."
+)
+
+print(
+    f"- Referencias duplicadas en el procesador: "
+    f"{cantidad_referencias_duplicadas_procesador:,}."
+)
+
+print(
+    f"- Referencias duplicadas en la fuente interna: "
+    f"{cantidad_referencias_duplicadas_internas:,}."
+)
+
+print("\nProceso de conciliación finalizado correctamente.")

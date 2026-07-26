@@ -1,0 +1,224 @@
+﻿referencia_normalizada,tipo_discrepancia,transaccion_id,fecha_interna,fecha_procesador,monto_interno,monto_procesador,diferencia_monto,estado_interno,estado_procesador
+PX-10035,estado,44,2026-05-01 00:00:00,2026-05-01 00:00:00,37264.81,37264.81,0.0,pendiente,rechazada
+PX-10045,estado,57,2026-04-03 00:00:00,2026-04-03 00:00:00,56443.43,56443.43,0.0,pendiente,rechazada
+PX-10049,monto,66,2026-04-24 00:00:00,2026-04-24 00:00:00,85414.54,85414.55,0.010000000009313226,aprobada,aprobada
+PX-10060,monto,78,2026-05-31 00:00:00,2026-05-31 00:00:00,176885.48,176785.48,100.0,aprobada,aprobada
+PX-10072,monto,94,2026-04-25 00:00:00,2026-04-25 00:00:00,58773.83,58673.83,100.0,aprobada,aprobada
+PX-10117,estado,158,2026-04-22 00:00:00,2026-04-22 00:00:00,91392.7,91392.7,0.0,pendiente,rechazada
+PX-10139,monto,184,2026-05-11 00:00:00,2026-05-11 00:00:00,137724.29,137624.29,100.0,aprobada,aprobada
+PX-10145,estado,191,2026-06-20 00:00:00,2026-06-20 00:00:00,125892.0,125892.0,0.0,pendiente,rechazada
+PX-10158,estado,207,2026-06-28 00:00:00,2026-06-28 00:00:00,66749.84,66749.84,0.0,pendiente,rechazada
+PX-10160,estado,212,2026-06-18 00:00:00,2026-06-18 00:00:00,139742.62,139742.62,0.0,pendiente,rechazada
+PX-10169,estado,224,2026-05-22 00:00:00,2026-05-22 00:00:00,100507.9,100507.9,0.0,pendiente,rechazada
+PX-10172,estado,227,2026-05-10 00:00:00,2026-05-10 00:00:00,92202.2,92202.2,0.0,pendiente,rechazada
+PX-10185,monto; estado,244,2026-05-09 00:00:00,2026-05-09 00:00:00,228727.92,228740.42,12.5,pendiente,rechazada
+PX-10193,estado,252,2026-06-03 00:00:00,2026-06-03 00:00:00,64703.03,64703.03,0.0,pendiente,rechazada
+PX-10212,estado,274,2026-05-19 00:00:00,2026-05-19 00:00:00,203961.13,203961.13,0.0,pendiente,rechazada
+PX-10230,monto,299,2026-05-28 00:00:00,2026-05-28 00:00:00,110047.94,110047.93,0.010000000009313226,aprobada,aprobada
+PX-10248,estado,323,2026-06-08 00:00:00,2026-06-08 00:00:00,77887.29,77887.29,0.0,pendiente,rechazada
+PX-10250,monto,325,2026-04-18 00:00:00,2026-04-18 00:00:00,238277.54,238177.54,100.0,aprobada,aprobada
+PX-10252,monto,328,2026-05-18 00:00:00,2026-05-18 00:00:00,223619.97,223519.97,100.0,aprobada,aprobada
+PX-10261,estado,340,2026-04-14 00:00:00,2026-04-14 00:00:00,101924.88,101924.88,0.0,pendiente,rechazada
+PX-10288,estado,376,2026-04-25 00:00:00,2026-04-25 00:00:00,247075.84,247075.84,0.0,pendiente,rechazada
+PX-10303,monto,393,2026-06-16 00:00:00,2026-06-16 00:00:00,120693.74,120706.24,12.5,aprobada,aprobada
+PX-10305,monto; estado,395,2026-05-22 00:00:00,2026-05-22 00:00:00,180460.16,180360.16,100.0,pendiente,rechazada
+PX-10322,estado,413,2026-04-15 00:00:00,2026-04-15 00:00:00,194600.75,194600.75,0.0,pendiente,rechazada
+PX-10332,estado,437,2026-05-24 00:00:00,2026-05-24 00:00:00,68762.17,68762.17,0.0,pendiente,rechazada
+PX-10337,estado,442,2026-04-19 00:00:00,2026-04-19 00:00:00,67111.08,67111.08,0.0,pendiente,rechazada
+PX-10366,monto,474,2026-06-05 00:00:00,2026-06-05 00:00:00,141806.14,141706.14,100.0,rechazada,rechazada
+PX-10367,monto,475,2026-06-01 00:00:00,2026-06-01 00:00:00,58321.6,58321.61,0.010000000002037268,aprobada,aprobada
+PX-10378,monto,489,2026-04-06 00:00:00,2026-04-06 00:00:00,234636.2,234636.19,0.010000000009313226,aprobada,aprobada
+PX-10404,monto,524,2026-05-17 00:00:00,2026-05-17 00:00:00,103790.27,103802.77,12.5,aprobada,aprobada
+PX-10427,monto,555,2026-05-30 00:00:00,2026-05-30 00:00:00,205595.62,205595.61,0.010000000009313226,aprobada,aprobada
+PX-10429,monto,557,2026-06-08 00:00:00,2026-06-08 00:00:00,142721.9,142734.4,12.5,aprobada,aprobada
+PX-10445,monto,581,2026-06-11 00:00:00,2026-06-11 00:00:00,230606.39,230618.89,12.5,aprobada,aprobada
+PX-10451,monto,588,2026-04-19 00:00:00,2026-04-19 00:00:00,220092.91,219992.91,100.0,aprobada,aprobada
+PX-10452,estado,589,2026-05-06 00:00:00,2026-05-06 00:00:00,33320.7,33320.7,0.0,pendiente,rechazada
+PX-10457,estado,595,2026-04-05 00:00:00,2026-04-05 00:00:00,206839.02,206839.02,0.0,pendiente,rechazada
+PX-10493,monto,637,2026-05-14 00:00:00,2026-05-14 00:00:00,196186.34,196198.84,12.5,aprobada,aprobada
+PX-10497,monto,641,2026-06-24 00:00:00,2026-06-24 00:00:00,97800.67,97700.67,100.0,aprobada,aprobada
+PX-10500,estado,646,2026-04-25 00:00:00,2026-04-25 00:00:00,210070.69,210070.69,0.0,pendiente,rechazada
+PX-10507,monto,655,2026-06-28 00:00:00,2026-06-28 00:00:00,15823.73,15723.73,100.0,aprobada,aprobada
+PX-10515,estado,665,2026-05-01 00:00:00,2026-05-01 00:00:00,130228.1,130228.1,0.0,pendiente,rechazada
+PX-10519,estado,671,2026-05-13 00:00:00,2026-05-13 00:00:00,44893.41,44893.41,0.0,pendiente,rechazada
+PX-10521,estado,676,2026-06-09 00:00:00,2026-06-09 00:00:00,30740.31,30740.31,0.0,pendiente,rechazada
+PX-10530,estado,691,2026-05-15 00:00:00,2026-05-15 00:00:00,48379.76,48379.76,0.0,pendiente,rechazada
+PX-10553,estado,717,2026-04-30 00:00:00,2026-04-30 00:00:00,37510.41,37510.41,0.0,pendiente,rechazada
+PX-10554,estado,718,2026-06-08 00:00:00,2026-06-08 00:00:00,40733.05,40733.05,0.0,pendiente,rechazada
+PX-10569,estado,735,2026-04-18 00:00:00,2026-04-18 00:00:00,90610.28,90610.28,0.0,pendiente,rechazada
+PX-10572,estado,741,2026-06-01 00:00:00,2026-06-01 00:00:00,35183.99,35183.99,0.0,pendiente,rechazada
+PX-10580,estado,751,2026-05-29 00:00:00,2026-05-29 00:00:00,56855.42,56855.42,0.0,pendiente,rechazada
+PX-10606,estado,785,2026-05-06 00:00:00,2026-05-06 00:00:00,205430.66,205430.66,0.0,pendiente,rechazada
+PX-10617,estado,799,2026-06-26 00:00:00,2026-06-26 00:00:00,198219.65,198219.65,0.0,pendiente,rechazada
+PX-10630,estado,818,2026-06-18 00:00:00,2026-06-18 00:00:00,23690.39,23690.39,0.0,pendiente,rechazada
+PX-10651,estado,846,2026-04-30 00:00:00,2026-04-30 00:00:00,229546.0,229546.0,0.0,pendiente,rechazada
+PX-10680,estado,878,2026-06-08 00:00:00,2026-06-08 00:00:00,10927.12,10927.12,0.0,pendiente,rechazada
+PX-10718,estado,934,2026-04-05 00:00:00,2026-04-05 00:00:00,47079.68,47079.68,0.0,pendiente,rechazada
+PX-10731,monto,950,2026-04-26 00:00:00,2026-04-26 00:00:00,50396.43,50396.44,0.010000000002037268,aprobada,aprobada
+PX-10749,estado,971,2026-06-15 00:00:00,2026-06-15 00:00:00,248121.88,248121.88,0.0,pendiente,rechazada
+PX-10753,monto,975,2026-04-12 00:00:00,2026-04-12 00:00:00,99717.9,99717.91,0.010000000009313226,rechazada,rechazada
+PX-10775,estado,1008,2026-05-19 00:00:00,2026-05-19 00:00:00,231533.34,231533.34,0.0,pendiente,rechazada
+PX-10776,monto,1009,2026-04-16 00:00:00,2026-04-16 00:00:00,242446.88,242459.38,12.5,aprobada,aprobada
+PX-10792,estado,1030,2026-06-24 00:00:00,2026-06-24 00:00:00,13689.72,13689.72,0.0,pendiente,rechazada
+PX-10795,monto,1033,2026-04-12 00:00:00,2026-04-12 00:00:00,236244.3,236144.3,100.0,aprobada,aprobada
+PX-10818,monto,1063,2026-06-05 00:00:00,2026-06-05 00:00:00,100511.82,100511.81,0.010000000009313226,aprobada,aprobada
+PX-10852,monto,1114,2026-05-26 00:00:00,2026-05-26 00:00:00,79662.57,79662.56,0.010000000009313226,aprobada,aprobada
+PX-10856,monto,1118,2026-05-28 00:00:00,2026-05-28 00:00:00,46427.53,46327.53,100.0,rechazada,rechazada
+PX-10857,monto,1119,2026-04-22 00:00:00,2026-04-22 00:00:00,119137.1,119137.09,0.010000000009313226,aprobada,aprobada
+PX-10862,monto,1124,2026-04-27 00:00:00,2026-04-27 00:00:00,92878.98,92778.98,100.0,aprobada,aprobada
+PX-10870,monto,1134,2026-06-13 00:00:00,2026-06-13 00:00:00,244350.23,244350.22,0.010000000009313226,rechazada,rechazada
+PX-10884,monto,1153,2026-04-28 00:00:00,2026-04-28 00:00:00,224736.62,224736.61,0.010000000009313226,aprobada,aprobada
+PX-10908,estado,1181,2026-04-19 00:00:00,2026-04-19 00:00:00,113427.78,113427.77,0.00999999999476131,pendiente,rechazada
+PX-10914,estado,1190,2026-04-07 00:00:00,2026-04-07 00:00:00,196423.19,196423.19,0.0,pendiente,rechazada
+PX-10922,estado,1201,2026-04-29 00:00:00,2026-04-29 00:00:00,75572.61,75572.61,0.0,pendiente,rechazada
+PX-10955,estado,1248,2026-05-23 00:00:00,2026-05-23 00:00:00,224312.55,224312.55,0.0,pendiente,rechazada
+PX-10966,monto,1263,2026-06-13 00:00:00,2026-06-13 00:00:00,225018.18,225030.68,12.5,aprobada,aprobada
+PX-10969,estado,1266,2026-05-08 00:00:00,2026-05-08 00:00:00,148073.76,148073.76,0.0,pendiente,rechazada
+PX-10971,monto,1268,2026-04-24 00:00:00,2026-04-24 00:00:00,38487.97,38500.47,12.5,aprobada,aprobada
+PX-10975,estado,1273,2026-04-13 00:00:00,2026-04-13 00:00:00,7323.86,7323.86,0.0,pendiente,rechazada
+PX-11016,estado,1327,2026-06-18 00:00:00,2026-06-18 00:00:00,224485.25,224485.25,0.0,pendiente,rechazada
+PX-11025,monto,1338,2026-04-12 00:00:00,2026-04-12 00:00:00,54954.6,54954.59,0.010000000002037268,rechazada,rechazada
+PX-11029,estado,1343,2026-04-06 00:00:00,2026-04-06 00:00:00,105536.0,105536.0,0.0,pendiente,rechazada
+PX-11033,estado,1350,2026-05-25 00:00:00,2026-05-25 00:00:00,87043.36,87043.36,0.0,pendiente,rechazada
+PX-11035,monto,1352,2026-06-22 00:00:00,2026-06-22 00:00:00,11539.86,11539.85,0.010000000000218279,aprobada,aprobada
+PX-11053,estado,1375,2026-06-08 00:00:00,2026-06-08 00:00:00,24696.47,24696.47,0.0,pendiente,rechazada
+PX-11099,estado,1436,2026-06-15 00:00:00,2026-06-15 00:00:00,41139.31,41139.31,0.0,pendiente,rechazada
+PX-11112,estado,1451,2026-04-05 00:00:00,2026-04-05 00:00:00,158154.12,158154.12,0.0,pendiente,rechazada
+PX-11122,monto,1465,2026-04-16 00:00:00,2026-04-16 00:00:00,193028.68,193041.18,12.5,aprobada,aprobada
+PX-11125,estado,1470,2026-05-06 00:00:00,2026-05-06 00:00:00,105201.52,105201.52,0.0,pendiente,rechazada
+PX-11137,estado,1488,2026-05-26 00:00:00,2026-05-26 00:00:00,80378.6,80378.6,0.0,pendiente,rechazada
+PX-11145,monto,1499,2026-04-23 00:00:00,2026-04-23 00:00:00,125170.61,125070.61,100.0,aprobada,aprobada
+PX-10048,solo_fuente_interna,,,,,,,,
+PX-10056,solo_fuente_interna,,,,,,,,
+PX-10057,solo_fuente_interna,,,,,,,,
+PX-10062,solo_fuente_interna,,,,,,,,
+PX-10079,solo_fuente_interna,,,,,,,,
+PX-10085,solo_fuente_interna,,,,,,,,
+PX-10091,solo_fuente_interna,,,,,,,,
+PX-10096,solo_fuente_interna,,,,,,,,
+PX-10098,solo_fuente_interna,,,,,,,,
+PX-10107,solo_fuente_interna,,,,,,,,
+PX-10112,solo_fuente_interna,,,,,,,,
+PX-10120,solo_fuente_interna,,,,,,,,
+PX-10134,solo_fuente_interna,,,,,,,,
+PX-10142,solo_fuente_interna,,,,,,,,
+PX-10149,solo_fuente_interna,,,,,,,,
+PX-10168,solo_fuente_interna,,,,,,,,
+PX-10182,solo_fuente_interna,,,,,,,,
+PX-10186,solo_fuente_interna,,,,,,,,
+PX-10198,solo_fuente_interna,,,,,,,,
+PX-10202,solo_fuente_interna,,,,,,,,
+PX-10204,solo_fuente_interna,,,,,,,,
+PX-10213,solo_fuente_interna,,,,,,,,
+PX-10220,solo_fuente_interna,,,,,,,,
+PX-10238,solo_fuente_interna,,,,,,,,
+PX-10246,solo_fuente_interna,,,,,,,,
+PX-10277,solo_fuente_interna,,,,,,,,
+PX-10289,solo_fuente_interna,,,,,,,,
+PX-10304,solo_fuente_interna,,,,,,,,
+PX-10316,solo_fuente_interna,,,,,,,,
+PX-10317,solo_fuente_interna,,,,,,,,
+PX-10342,solo_fuente_interna,,,,,,,,
+PX-10353,solo_fuente_interna,,,,,,,,
+PX-10355,solo_fuente_interna,,,,,,,,
+PX-10362,solo_fuente_interna,,,,,,,,
+PX-10363,solo_fuente_interna,,,,,,,,
+PX-10365,solo_fuente_interna,,,,,,,,
+PX-10369,solo_fuente_interna,,,,,,,,
+PX-10372,solo_fuente_interna,,,,,,,,
+PX-10380,solo_fuente_interna,,,,,,,,
+PX-10385,solo_fuente_interna,,,,,,,,
+PX-10386,solo_fuente_interna,,,,,,,,
+PX-10395,solo_fuente_interna,,,,,,,,
+PX-10405,solo_fuente_interna,,,,,,,,
+PX-10411,solo_fuente_interna,,,,,,,,
+PX-10416,solo_fuente_interna,,,,,,,,
+PX-10423,solo_fuente_interna,,,,,,,,
+PX-10439,solo_fuente_interna,,,,,,,,
+PX-10447,solo_fuente_interna,,,,,,,,
+PX-10453,solo_fuente_interna,,,,,,,,
+PX-10490,solo_fuente_interna,,,,,,,,
+PX-10504,solo_fuente_interna,,,,,,,,
+PX-10578,solo_fuente_interna,,,,,,,,
+PX-10588,solo_fuente_interna,,,,,,,,
+PX-10596,solo_fuente_interna,,,,,,,,
+PX-10599,solo_fuente_interna,,,,,,,,
+PX-10620,solo_fuente_interna,,,,,,,,
+PX-10626,solo_fuente_interna,,,,,,,,
+PX-10627,solo_fuente_interna,,,,,,,,
+PX-10628,solo_fuente_interna,,,,,,,,
+PX-10638,solo_fuente_interna,,,,,,,,
+PX-10642,solo_fuente_interna,,,,,,,,
+PX-10655,solo_fuente_interna,,,,,,,,
+PX-10656,solo_fuente_interna,,,,,,,,
+PX-10658,solo_fuente_interna,,,,,,,,
+PX-10669,solo_fuente_interna,,,,,,,,
+PX-10690,solo_fuente_interna,,,,,,,,
+PX-10692,solo_fuente_interna,,,,,,,,
+PX-10707,solo_fuente_interna,,,,,,,,
+PX-10714,solo_fuente_interna,,,,,,,,
+PX-10720,solo_fuente_interna,,,,,,,,
+PX-10733,solo_fuente_interna,,,,,,,,
+PX-10748,solo_fuente_interna,,,,,,,,
+PX-10759,solo_fuente_interna,,,,,,,,
+PX-10766,solo_fuente_interna,,,,,,,,
+PX-10767,solo_fuente_interna,,,,,,,,
+PX-10772,solo_fuente_interna,,,,,,,,
+PX-10787,solo_fuente_interna,,,,,,,,
+PX-10788,solo_fuente_interna,,,,,,,,
+PX-10796,solo_fuente_interna,,,,,,,,
+PX-10807,solo_fuente_interna,,,,,,,,
+PX-10827,solo_fuente_interna,,,,,,,,
+PX-10873,solo_fuente_interna,,,,,,,,
+PX-10888,solo_fuente_interna,,,,,,,,
+PX-10891,solo_fuente_interna,,,,,,,,
+PX-10902,solo_fuente_interna,,,,,,,,
+PX-10911,solo_fuente_interna,,,,,,,,
+PX-10917,solo_fuente_interna,,,,,,,,
+PX-10931,solo_fuente_interna,,,,,,,,
+PX-10936,solo_fuente_interna,,,,,,,,
+PX-10983,solo_fuente_interna,,,,,,,,
+PX-10991,solo_fuente_interna,,,,,,,,
+PX-11004,solo_fuente_interna,,,,,,,,
+PX-11005,solo_fuente_interna,,,,,,,,
+PX-11006,solo_fuente_interna,,,,,,,,
+PX-11014,solo_fuente_interna,,,,,,,,
+PX-11019,solo_fuente_interna,,,,,,,,
+PX-11020,solo_fuente_interna,,,,,,,,
+PX-11039,solo_fuente_interna,,,,,,,,
+PX-11041,solo_fuente_interna,,,,,,,,
+PX-11045,solo_fuente_interna,,,,,,,,
+PX-11059,solo_fuente_interna,,,,,,,,
+PX-11061,solo_fuente_interna,,,,,,,,
+PX-11064,solo_fuente_interna,,,,,,,,
+PX-11068,solo_fuente_interna,,,,,,,,
+PX-11079,solo_fuente_interna,,,,,,,,
+PX-11087,solo_fuente_interna,,,,,,,,
+PX-11090,solo_fuente_interna,,,,,,,,
+PX-11094,solo_fuente_interna,,,,,,,,
+PX-11095,solo_fuente_interna,,,,,,,,
+PX-11096,solo_fuente_interna,,,,,,,,
+PX-11100,solo_fuente_interna,,,,,,,,
+PX-11105,solo_fuente_interna,,,,,,,,
+PX-11106,solo_fuente_interna,,,,,,,,
+PX-11111,solo_fuente_interna,,,,,,,,
+PX-11135,solo_fuente_interna,,,,,,,,
+PX-99000,solo_procesador,,,,,,,,
+PX-99001,solo_procesador,,,,,,,,
+PX-99002,solo_procesador,,,,,,,,
+PX-99003,solo_procesador,,,,,,,,
+PX-99004,solo_procesador,,,,,,,,
+PX-99005,solo_procesador,,,,,,,,
+PX-99006,solo_procesador,,,,,,,,
+PX-99007,solo_procesador,,,,,,,,
+PX-99008,solo_procesador,,,,,,,,
+PX-99009,solo_procesador,,,,,,,,
+PX-99010,solo_procesador,,,,,,,,
+PX-99011,solo_procesador,,,,,,,,
+PX-99012,solo_procesador,,,,,,,,
+PX-99013,solo_procesador,,,,,,,,
+PX-99014,solo_procesador,,,,,,,,
+PX-10003,referencia_duplicada_procesador,,,,,,,,
+PX-10004,referencia_duplicada_procesador,,,,,,,,
+PX-10002,referencia_duplicada_procesador,,,,,,,,
+PX-10001,referencia_duplicada_procesador,,,,,,,,
